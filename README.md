@@ -11,6 +11,7 @@
 - **100% Client-Side** — Images never leave your browser
 - **Resize** — Set width or height with aspect ratio lock
 - **Crop** — Free or fixed ratio (1:1, 16:9, 4:3) with draggable, resizable selection
+- **Before/After Comparison** — Drag slider to compare original vs compressed instantly after processing
 - **Batch Processing** — Process multiple images at once with the same settings
 - **ZIP Download** — Download all batch-processed images as a single ZIP file
 - **JPEG & WebP Compression** — Adjustable quality via Canvas API

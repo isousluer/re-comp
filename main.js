@@ -51,6 +51,10 @@ const cropSelection = document.getElementById('crop-selection');
 const cropApplyBtn = document.getElementById('crop-apply-btn');
 const cropCancelBtn = document.getElementById('crop-cancel-btn');
 const cropRatioBtns = document.querySelectorAll('.crop-ratio-btn');
+const compareContainer = document.getElementById('compare-container');
+const compareOriginal = document.getElementById('compare-original');
+const compareProcessed = document.getElementById('compare-processed');
+const compareSlider = document.getElementById('compare-slider');
 
 // ---------- State ----------
 let state = {
@@ -191,6 +195,9 @@ function loadImage(file) {
       filenameInput.value = '';
       state.crop = null;
       cropToggleBtn.classList.add('hidden');
+      compareContainer.classList.add('hidden');
+      previewCanvas.style.visibility = '';
+      previewCanvas.classList.remove('hidden');
       exitCropMode();
     };
     img.src = e.target.result;
@@ -427,6 +434,10 @@ async function processImage(targetWidth, targetHeight) {
     previewCanvas.height = targetHeight;
     previewCtx.drawImage(previewImg, 0, 0);
     URL.revokeObjectURL(previewImg.src);
+
+    previewCanvas.style.visibility = 'hidden';
+    compareContainer.classList.remove('hidden');
+    updateCompare();
   };
   previewImg.src = URL.createObjectURL(blob);
 
@@ -594,6 +605,59 @@ function downloadAsZip(results) {
   });
 }
 
+// ---------- Compare ----------
+let compareDrag = false;
+
+function updateCompare() {
+  if (!state.originalImage || !state.processedBlob) return;
+
+  // Orijinal taraf: kırpılmış ama sıkıştırılmamış
+  const w = previewCanvas.width;
+  const h = previewCanvas.height;
+  const tmpCanvas = document.createElement('canvas');
+  tmpCanvas.width = w;
+  tmpCanvas.height = h;
+  const ctx = tmpCanvas.getContext('2d');
+  if (state.crop) {
+    ctx.drawImage(state.originalImage, state.crop.x, state.crop.y, state.crop.w, state.crop.h, 0, 0, w, h);
+  } else {
+    ctx.drawImage(state.originalImage, 0, 0, w, h);
+  }
+  compareOriginal.src = tmpCanvas.toDataURL('image/png');
+
+  const newUrl = URL.createObjectURL(state.processedBlob);
+  compareProcessed.onload = () => URL.revokeObjectURL(newUrl);
+  compareProcessed.src = newUrl;
+
+  compareSlider.style.left = '50%';
+  updateClip(50);
+}
+
+function updateClip(pct) {
+  document.getElementById('compare-left').style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+}
+
+compareSlider.addEventListener('mousedown', (e) => { compareDrag = true; e.preventDefault(); });
+window.addEventListener('mouseup', () => { compareDrag = false; });
+window.addEventListener('mousemove', (e) => {
+  if (!compareDrag) return;
+  const rect = compareContainer.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(100, (e.clientX - rect.left) / rect.width * 100));
+  compareSlider.style.left = pct + '%';
+  updateClip(pct);
+});
+
+// Touch desteği
+compareSlider.addEventListener('touchstart', (e) => { compareDrag = true; e.preventDefault(); }, { passive: false });
+window.addEventListener('touchend', () => { compareDrag = false; });
+window.addEventListener('touchmove', (e) => {
+  if (!compareDrag) return;
+  const rect = compareContainer.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(100, (e.touches[0].clientX - rect.left) / rect.width * 100));
+  compareSlider.style.left = pct + '%';
+  updateClip(pct);
+}, { passive: true });
+
 // ---------- Crop ----------
 cropToggleBtn.addEventListener('click', () => {
   const isActive = cropOverlay.classList.contains('hidden');
@@ -616,7 +680,8 @@ cropRatioBtns.forEach(btn => {
 });
 
 function enterCropMode() {
-  // Overlay'i canvas boyutuna göre konumlandır
+  compareContainer.classList.add('hidden');
+  previewCanvas.style.visibility = '';
   const canvasRect = previewCanvas.getBoundingClientRect();
   const containerRect = previewCanvas.parentElement.getBoundingClientRect();
   cropOverlay.style.left = (canvasRect.left - containerRect.left) + 'px';
