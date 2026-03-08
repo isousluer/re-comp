@@ -1,14 +1,16 @@
 # Active Context
 
 ## Mevcut Odak
-Uygulama stabil, tüm core özellikler çalışıyor.
+Uygulama stabil, yeni özellikler eklendi.
 
 ## Son Değişiklikler
-- `libimagequant-wasm` PNG quantization düzeltildi: Worker/WASM path sorunu nedeniyle sıkıştırma çalışmıyordu. `LibImageQuant` wrapper bypass edilerek WASM modülü (`ImageQuantizer`, `encode_palette_to_png`) doğrudan ana thread'de import edildi.
-- PNG quantization'a `setDithering(1.0)` eklendi — renk kayması hissi azaltıldı.
-- PNG format uyarı mesajı güncellendi: lossy işlem olduğu ve renk doğruluğu kritikse WebP/JPEG tercih edilmesi gerektiği belirtiliyor.
-- Watermark silme özelliği (LaMa + ONNX Runtime Web) denendi, tarayıcıda CPU üzerinde çok yavaş çalıştığı için projeden kaldırıldı.
+- **localStorage ayar kaydı**: Kalite, format ve aspect ratio kilidi sayfa yenilenince korunuyor.
+- **Dosya adı özelleştirme**: Görsel işlenince indirme butonunun altında düzenlenebilir dosya adı alanı çıkıyor. Uzantı otomatik güncelleniyor.
+- **Vercel deploy**: Proje `recomp.usluer.net` adresinde yayında. `.gitignore` eklendi, `node_modules` repo'dan kaldırıldı.
+- **Dark/light mode**: Denendi, kaldırıldı — projenin dark-only tasarımı korundu.
 
 ## Sonraki Adımlar
-- Kod optimizasyonları ve ileriki sürüm planları
-- İsteğe bağlı olarak ek filtre veya ayarlar eklenebilir
+- Çoklu görsel yükleme
+- Önce/sonra karşılaştırma slider'ı
+- AVIF format desteği
+- Görsel metadata temizleme (EXIF)

@@ -701,6 +701,36 @@ input[type="number"] {
 }
 
 
+/* ---------- Filename ---------- */
+.filename-row {
+  margin-top: var(--space-sm);
+}
+
+.filename-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 3rem 0.5rem 0.75rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.filename-input:focus {
+  border-color: var(--accent-1);
+}
+
+.filename-ext {
+  position: absolute;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
 /* ---------- Footer ---------- */
 .footer {
   margin-top: auto;

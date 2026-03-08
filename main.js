@@ -27,6 +27,9 @@ const formatBtns = document.querySelectorAll('.format-btn');
 
 const processBtn = document.getElementById('process-btn');
 const downloadBtn = document.getElementById('download-btn');
+const filenameRow = document.getElementById('filename-row');
+const filenameInput = document.getElementById('filename-input');
+const filenameExt = document.getElementById('filename-ext');
 
 const originalDimensions = document.getElementById('original-dimensions');
 const originalSize = document.getElementById('original-size');
@@ -179,6 +182,7 @@ heightInput.addEventListener('input', () => {
 lockRatioBtn.addEventListener('click', () => {
   state.lockRatio = !state.lockRatio;
   lockRatioBtn.classList.toggle('active', state.lockRatio);
+  saveSettings();
 
   // When locking, recalculate based on last changed dimension
   if (state.lockRatio && state.originalImage) {
@@ -192,6 +196,37 @@ lockRatioBtn.addEventListener('click', () => {
   }
 });
 
+// ---------- Settings (localStorage) ----------
+const SETTINGS_KEY = 'recomp-settings';
+
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+    quality: qualitySlider.value,
+    format: state.outputFormat,
+    lockRatio: state.lockRatio,
+  }));
+}
+
+function loadSettings() {
+  const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || 'null');
+  if (!saved) return;
+
+  qualitySlider.value = saved.quality;
+  qualityValue.textContent = `${saved.quality}%`;
+  updateSliderTrack();
+
+  if (saved.format) {
+    state.outputFormat = saved.format;
+    formatBtns.forEach((b) => {
+      b.classList.toggle('active', b.dataset.format === saved.format);
+    });
+    updateQualityState();
+  }
+
+  state.lockRatio = saved.lockRatio ?? true;
+  lockRatioBtn.classList.toggle('active', state.lockRatio);
+}
+
 // ---------- Quality Slider ----------
 let autoProcessTimer = null;
 
@@ -199,6 +234,7 @@ qualitySlider.addEventListener('input', () => {
   qualityValue.textContent = `${qualitySlider.value}%`;
   updateSliderTrack();
   scheduleAutoProcess();
+  saveSettings();
 });
 
 function updateSliderTrack() {
@@ -218,6 +254,10 @@ formatBtns.forEach((btn) => {
     state.outputFormat = btn.dataset.format;
     updateQualityState();
     scheduleAutoProcess();
+    saveSettings();
+    if (filenameRow && !filenameRow.classList.contains('hidden')) {
+      filenameExt.textContent = `.${getFileExtension(state.outputFormat)}`;
+    }
   });
 });
 
@@ -372,9 +412,11 @@ async function processImage(targetWidth, targetHeight) {
 
   resultInfo.classList.remove('hidden');
   downloadBtn.classList.remove('hidden');
+  filenameRow.classList.remove('hidden');
+  const baseName = state.originalFile.name.replace(/\.[^.]+$/, '');
+  filenameInput.value = `${baseName}_recomp`;
+  filenameExt.textContent = `.${getFileExtension(state.outputFormat)}`;
 
-  // Debug log
-  console.log(`[Re-Comp] Format: ${format}, Kalite: ${(quality * 100).toFixed(0)}%, Orijinal: ${formatFileSize(state.originalFile.size)}, Yeni: ${formatFileSize(blob.size)}`);
 }
 
 // ---------- Download ----------
@@ -382,8 +424,7 @@ downloadBtn.addEventListener('click', () => {
   if (!state.processedBlob) return;
 
   const ext = getFileExtension(state.outputFormat);
-  const originalName = state.originalFile.name.replace(/\.[^.]+$/, '');
-  const filename = `${originalName}_recomp.${ext}`;
+  const filename = `${(filenameInput.value.trim() || 'recomp')}.${ext}`;
 
   const url = URL.createObjectURL(state.processedBlob);
   const a = document.createElement('a');
@@ -394,3 +435,5 @@ downloadBtn.addEventListener('click', () => {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 });
+
+loadSettings();
