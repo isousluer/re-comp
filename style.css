@@ -292,6 +292,7 @@ body::before {
   grid-template-columns: 380px 1fr;
   gap: var(--space-lg);
   margin-top: var(--space-lg);
+  align-items: start;
 }
 
 /* ---------- Hidden ---------- */
