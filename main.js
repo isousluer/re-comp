@@ -135,6 +135,8 @@ function loadImage(file) {
       resultInfo.classList.add('hidden');
       previewCanvas.classList.add('hidden');
       previewPlaceholder.classList.remove('hidden');
+      filenameRow.classList.add('hidden');
+      filenameInput.value = '';
     };
     img.src = e.target.result;
   };
