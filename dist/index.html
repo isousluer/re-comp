@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Re-Comp — Görsellerinizi yerel olarak yeniden boyutlandırın ve sıkıştırın. Sunucuya yükleme yok." />
+  <title>Re-Comp | Görsel Boyutlandırma & Sıkıştırma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="/assets/index-DYhadzj_.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BclmYeix.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#logoGrad)" stroke-width="2.5"/>
+          <path d="M10 16L14 20L22 12" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="2" y1="2" x2="30" y2="30">
+              <stop stop-color="#818cf8"/>
+              <stop offset="1" stop-color="#c084fc"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1>Re-Comp</h1>
+      </div>
+      <p class="subtitle">Görsellerinizi yerel olarak yeniden boyutlandırın & sıkıştırın</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Upload Area -->
+      <section id="upload-section" class="card upload-card">
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-zone-content">
+            <svg class="upload-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 32L8 36C8 38.2091 9.79086 40 12 40L36 40C38.2091 40 40 38.2091 40 36L40 32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M24 8L24 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M16 16L24 8L32 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p class="drop-text">Görseli sürükleyip bırakın</p>
+            <p class="drop-subtext">veya</p>
+            <button id="browse-btn" class="btn btn-secondary" type="button">Dosya Seç</button>
+            <p class="drop-hint">PNG, JPG, WebP desteklenir</p>
+          </div>
+          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" hidden />
+        </div>
+      </section>
+
+      <!-- Controls + Preview (hidden until image loaded) -->
+      <section id="editor-section" class="editor-section hidden">
+        <!-- Controls Panel -->
+        <div class="card controls-card">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Ayarlar
+          </h2>
+
+          <!-- Original Info -->
+          <div class="info-row">
+            <span class="info-label">Orijinal Boyut</span>
+            <span id="original-dimensions" class="info-value">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Orijinal Dosya</span>
+            <span id="original-size" class="info-value">—</span>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Resize Controls -->
+          <div class="control-group">
+            <label class="control-label">Yeni Boyut</label>
+            <div class="dimension-inputs">
+              <div class="input-group">
+                <label for="width-input" class="input-label">Genişlik</label>
+                <div class="input-wrapper">
+                  <input type="number" id="width-input" min="1" placeholder="1200" />
+                  <span class="input-unit">px</span>
+                </div>
+              </div>
+
+              <button id="lock-ratio" class="lock-btn active" type="button" title="En-boy oranını kilitle">
+                <svg class="lock-icon-locked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <svg class="lock-icon-unlocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                </svg>
+              </button>
+
+              <div class="input-group">
+                <label for="height-input" class="input-label">Yükseklik</label>
+                <div class="input-wrapper">
+                  <input type="number" id="height-input" min="1" placeholder="630" />
+                  <span class="input-unit">px</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Compression Controls -->
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label">Sıkıştırma Kalitesi</label>
+              <span id="quality-value" class="quality-badge">80%</span>
+            </div>
+            <input type="range" id="quality-slider" min="1" max="100" value="80" class="slider" />
+            <div class="slider-labels">
+              <span>Küçük Dosya</span>
+              <span>Yüksek Kalite</span>
+            </div>
+            <p id="png-warning" class="png-warning hidden">PNG kayıpsız bir formattır. Kalite ayarı yalnızca JPEG ve WebP için geçerlidir.</p>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Format -->
+          <div class="control-group">
+            <label class="control-label">Çıktı Formatı</label>
+            <div class="format-buttons">
+              <button class="format-btn active" data-format="image/jpeg" type="button">JPEG</button>
+              <button class="format-btn" data-format="image/webp" type="button">WebP</button>
+              <button class="format-btn" data-format="image/png" type="button">PNG</button>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button id="process-btn" class="btn btn-primary" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              İşle
+            </button>
+            <button id="download-btn" class="btn btn-success hidden" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              İndir
+            </button>
+          </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="card preview-card">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Önizleme
+          </h2>
+          <div id="preview-container" class="preview-container">
+            <div id="preview-placeholder" class="preview-placeholder">
+              <p>Görseli işledikten sonra önizleme burada görünecek</p>
+            </div>
+            <canvas id="preview-canvas" class="preview-canvas hidden"></canvas>
+          </div>
+          <!-- Result Info -->
+          <div id="result-info" class="result-info hidden">
+            <div class="result-item">
+              <span class="result-label">Yeni Boyut</span>
+              <span id="result-dimensions" class="result-value">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Yeni Dosya</span>
+              <span id="result-size" class="result-value">—</span>
+            </div>
+            <div class="result-item result-savings">
+              <span class="result-label">Tasarruf</span>
+              <span id="result-savings" class="result-value savings">—</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Re-Comp — Tüm işlemler tarayıcınızda yerel olarak gerçekleşir. Hiçbir veri sunucuya gönderilmez.</p>
+    </footer>
+  </div>
+
+</body>
+</html>
