@@ -741,6 +741,13 @@ input[type="number"] {
   pointer-events: none;
 }
 
+.target-size-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
 /* ---------- Compare ---------- */
 .compare-container {
   position: absolute;

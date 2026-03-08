@@ -16,6 +16,7 @@
 - **ZIP Download** — Download all batch-processed images as a single ZIP file
 - **JPEG & WebP Compression** — Adjustable quality via Canvas API
 - **PNG Quantization** — Lossy PNG optimization using `libimagequant-wasm` (WebAssembly), with dithering support
+- **Target File Size** — Set a KB target and let Re-Comp find the optimal quality automatically
 - **Live Preview** — See file size difference instantly
 - **Persistent Settings** — Quality, format and aspect ratio lock saved to localStorage
 - **Custom Filename** — Edit the output filename before downloading

@@ -188,6 +188,7 @@ function loadImage(file) {
       downloadZipBtn.classList.add('hidden');
       resultInfo.classList.add('hidden');
       previewCanvas.classList.add('hidden');
+      previewCanvas.getContext('2d').clearRect(0, 0, previewCanvas.width, previewCanvas.height);
       previewPlaceholder.classList.remove('hidden');
       filenameRow.classList.add('hidden');
       batchList.classList.add('hidden');
@@ -307,6 +308,7 @@ updateSliderTrack();
 
 // ---------- Format Selection ----------
 const pngWarning = document.getElementById('png-warning');
+const targetSizeInput = document.getElementById('target-size-input');
 
 formatBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -416,10 +418,37 @@ async function compressImage(img, targetWidth, targetHeight, format, quality, cr
   }
 }
 
+// ---------- Binary Search for Target Size ----------
+async function findQualityForSize(w, h, format, targetBytes) {
+  let lo = 0.01, hi = 1.0, best = 0.1;
+  for (let i = 0; i < 6; i++) {
+    const mid = (lo + hi) / 2;
+    const blob = await compressImage(state.originalImage, w, h, format, mid, state.crop);
+    if (blob.size <= targetBytes) {
+      best = mid;
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+  }
+  return best;
+}
+
 // ---------- Single Process ----------
 async function processImage(targetWidth, targetHeight) {
-  const quality = parseInt(qualitySlider.value) / 100;
   const format = state.outputFormat;
+  const targetSizeKB = parseFloat(targetSizeInput.value);
+  let quality;
+
+  if (targetSizeKB > 0 && format !== 'image/png') {
+    quality = await findQualityForSize(targetWidth, targetHeight, format, targetSizeKB * 1024);
+    // Slider'ı güncelle
+    qualitySlider.value = Math.round(quality * 100);
+    qualityValue.textContent = `${Math.round(quality * 100)}%`;
+    updateSliderTrack();
+  } else {
+    quality = parseInt(qualitySlider.value) / 100;
+  }
 
   const blob = await compressImage(state.originalImage, targetWidth, targetHeight, format, quality, state.crop);
 
@@ -611,7 +640,6 @@ let compareDrag = false;
 function updateCompare() {
   if (!state.originalImage || !state.processedBlob) return;
 
-  // Orijinal taraf: kırpılmış ama sıkıştırılmamış
   const w = previewCanvas.width;
   const h = previewCanvas.height;
   const tmpCanvas = document.createElement('canvas');
