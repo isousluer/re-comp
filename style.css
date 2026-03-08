@@ -732,6 +732,61 @@ input[type="number"] {
   pointer-events: none;
 }
 
+/* ---------- Batch List ---------- */
+.batch-list {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.batch-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 0.8rem;
+  gap: var(--space-sm);
+}
+
+.batch-item.clickable {
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.batch-item.clickable:hover,
+.batch-item.active {
+  background: var(--accent-glow);
+  border: 1px solid var(--border-accent);
+}
+
+.batch-item-name {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.batch-item-status.processing { color: var(--text-muted); }
+.batch-item-status.done { color: var(--success); flex-shrink: 0; }
+.batch-item-status.error { color: var(--danger); flex-shrink: 0; }
+
+.batch-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
 /* ---------- Footer ---------- */
 .footer {
   margin-top: auto;
@@ -798,7 +853,6 @@ input[type="number"] {
 
   .lock-btn {
     align-self: center;
-    transform: rotate(90deg);
   }
 
   .action-buttons {

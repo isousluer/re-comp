@@ -48,9 +48,9 @@
             <p class="drop-text">Görseli sürükleyip bırakın</p>
             <p class="drop-subtext">veya</p>
             <button id="browse-btn" class="btn btn-secondary" type="button">Dosya Seç</button>
-            <p class="drop-hint">PNG, JPG, WebP desteklenir</p>
+            <p class="drop-hint">PNG, JPG, WebP · Çoklu seçim desteklenir</p>
           </div>
-          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" hidden />
+          <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" multiple hidden />
         </div>
       </section>
 
@@ -148,6 +148,10 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               İndir
             </button>
+            <button id="download-zip-btn" class="btn btn-success hidden" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ZIP İndir
+            </button>
           </div>
           <div id="filename-row" class="filename-row hidden">
             <div class="input-wrapper">
@@ -155,6 +159,8 @@
               <span id="filename-ext" class="filename-ext">.jpg</span>
             </div>
           </div>
+          <!-- Batch List -->
+          <div id="batch-list" class="batch-list hidden"></div>
         </div>
 
         <!-- Preview Panel -->
