@@ -4,12 +4,15 @@
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![Vite](https://img.shields.io/badge/Vite-6.x-646cff?style=for-the-badge)
 
-**Re-Comp** is a fast, modern web app for resizing and compressing images entirely in your browser — no uploads, no servers, 100% private.
+**Re-Comp** is a fast, modern web app for resizing, cropping and compressing images entirely in your browser — no uploads, no servers, 100% private.
 
 ## ✨ Features
 
 - **100% Client-Side** — Images never leave your browser
 - **Resize** — Set width or height with aspect ratio lock
+- **Crop** — Free or fixed ratio (1:1, 16:9, 4:3) with draggable, resizable selection
+- **Batch Processing** — Process multiple images at once with the same settings
+- **ZIP Download** — Download all batch-processed images as a single ZIP file
 - **JPEG & WebP Compression** — Adjustable quality via Canvas API
 - **PNG Quantization** — Lossy PNG optimization using `libimagequant-wasm` (WebAssembly), with dithering support
 - **Live Preview** — See file size difference instantly
@@ -22,6 +25,7 @@
 - **Architecture**: Vanilla JavaScript + HTML5 + CSS3 (Zero Framework)
 - **Build Tool**: Vite.js
 - **Image Engines**: Browser Canvas API (`toDataURL`), WebAssembly-powered `libimagequant-wasm`
+- **ZIP**: `fflate` — lightweight browser-native ZIP generation
 - **Fonts**: Inter (Google Fonts)
 
 ## 🚀 Getting Started

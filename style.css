@@ -732,6 +732,55 @@ input[type="number"] {
   pointer-events: none;
 }
 
+/* ---------- Crop ---------- */
+.crop-toggle {
+  margin-left: auto;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.crop-toggle.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-1);
+  color: var(--accent-1);
+}
+
+.crop-overlay {
+  position: absolute;
+  cursor: crosshair;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.crop-selection {
+  position: absolute;
+  border: 2px solid var(--accent-1);
+  background: rgba(129, 140, 248, 0.15);
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.45);
+  cursor: grab;
+}
+
+.crop-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 2px solid var(--accent-1);
+  border-radius: 2px;
+}
+
+.crop-handle[data-dir="nw"] { top:-5px; left:-5px; cursor:nw-resize; }
+.crop-handle[data-dir="n"]  { top:-5px; left:calc(50% - 5px); cursor:n-resize; }
+.crop-handle[data-dir="ne"] { top:-5px; right:-5px; cursor:ne-resize; }
+.crop-handle[data-dir="e"]  { top:calc(50% - 5px); right:-5px; cursor:e-resize; }
+.crop-handle[data-dir="se"] { bottom:-5px; right:-5px; cursor:se-resize; }
+.crop-handle[data-dir="s"]  { bottom:-5px; left:calc(50% - 5px); cursor:s-resize; }
+.crop-handle[data-dir="sw"] { bottom:-5px; left:-5px; cursor:sw-resize; }
+.crop-handle[data-dir="w"]  { top:calc(50% - 5px); left:-5px; cursor:w-resize; }
+
 /* ---------- Batch List ---------- */
 .batch-list {
   margin-top: var(--space-sm);
