@@ -419,11 +419,11 @@ async function compressImage(img, targetWidth, targetHeight, format, quality, cr
 }
 
 // ---------- Binary Search for Target Size ----------
-async function findQualityForSize(w, h, format, targetBytes) {
+async function findQualityForSize(img, w, h, format, targetBytes) {
   let lo = 0.01, hi = 1.0, best = 0.1;
   for (let i = 0; i < 6; i++) {
     const mid = (lo + hi) / 2;
-    const blob = await compressImage(state.originalImage, w, h, format, mid, state.crop);
+    const blob = await compressImage(img, w, h, format, mid, state.crop);
     if (blob.size <= targetBytes) {
       best = mid;
       lo = mid;
@@ -441,7 +441,7 @@ async function processImage(targetWidth, targetHeight) {
   let quality;
 
   if (targetSizeKB > 0 && format !== 'image/png') {
-    quality = await findQualityForSize(targetWidth, targetHeight, format, targetSizeKB * 1024);
+    quality = await findQualityForSize(state.originalImage, targetWidth, targetHeight, format, targetSizeKB * 1024);
     // Slider'ı güncelle
     qualitySlider.value = Math.round(quality * 100);
     qualityValue.textContent = `${Math.round(quality * 100)}%`;
@@ -531,7 +531,12 @@ async function triggerBatchProcess() {
             else if (targetHeight && !targetWidth) w = Math.round(h * ratio);
 
             try {
-              resolve(await compressImage(img, w, h, format, quality));
+              const targetSizeKB = parseFloat(targetSizeInput.value);
+              let q = quality;
+              if (targetSizeKB > 0 && format !== 'image/png') {
+                q = await findQualityForSize(img, w, h, format, targetSizeKB * 1024);
+              }
+              resolve(await compressImage(img, w, h, format, q));
             } catch (err) { reject(err); }
           };
           img.onerror = reject;
