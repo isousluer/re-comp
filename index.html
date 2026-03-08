@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Re-Comp — Görsellerinizi yerel olarak yeniden boyutlandırın ve sıkıştırın. Sunucuya yükleme yok." />
   <title>Re-Comp | Görsel Boyutlandırma & Sıkıştırma</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -16,14 +17,17 @@
     <header class="header">
       <div class="logo">
         <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#logoGrad)" stroke-width="2.5"/>
-          <path d="M10 16L14 20L22 12" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           <defs>
-            <linearGradient id="logoGrad" x1="2" y1="2" x2="30" y2="30">
-              <stop stop-color="#818cf8"/>
+            <linearGradient id="logoGrad" x1="2" y1="30" x2="30" y2="2">
+              <stop offset="0" stop-color="#818cf8"/>
               <stop offset="1" stop-color="#c084fc"/>
             </linearGradient>
           </defs>
+          <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#logoGrad)" stroke-width="2.5"/>
+          <line x1="16" y1="16" x2="8" y2="24" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round"/>
+          <polyline points="12,24 8,24 8,20" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="16" y1="16" x2="24" y2="8" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round"/>
+          <polyline points="20,8 24,8 24,12" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <h1>Re-Comp</h1>
       </div>
