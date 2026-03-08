@@ -2,3 +2,6 @@ node_modules/
 dist/
 .DS_Store
 *.local
+memory-bank/
+AGENT.md
+public/lama_fp32.onnx
