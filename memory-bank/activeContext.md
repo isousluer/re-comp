@@ -1,14 +1,13 @@
 # Active Context
 
 ## Mevcut Odak
-Uygulama temel sürümü tamamlandı, optimizasyonlar eklendi.
+Uygulama stabil, tüm core özellikler çalışıyor.
 
 ## Son Değişiklikler
-- UI ve stil dosyaları oluşturuldu (Dark theme, responsive)
-- Görsel işleme mantığı implement edildi (Canvas API)
-- `toDataURL` ile JPEG/WebP kalite kontrolü iyileştirildi
-- Tüm ayar değişimlerinde (genişlik, yükseklik, kalite, format) otomatik işleme desteği eklendi
-- `libimagequant-wasm` ile PNG quantization eklendi
+- `libimagequant-wasm` PNG quantization düzeltildi: Worker/WASM path sorunu nedeniyle sıkıştırma çalışmıyordu. `LibImageQuant` wrapper bypass edilerek WASM modülü (`ImageQuantizer`, `encode_palette_to_png`) doğrudan ana thread'de import edildi.
+- PNG quantization'a `setDithering(1.0)` eklendi — renk kayması hissi azaltıldı.
+- PNG format uyarı mesajı güncellendi: lossy işlem olduğu ve renk doğruluğu kritikse WebP/JPEG tercih edilmesi gerektiği belirtiliyor.
+- Watermark silme özelliği (LaMa + ONNX Runtime Web) denendi, tarayıcıda CPU üzerinde çok yavaş çalıştığı için projeden kaldırıldı.
 
 ## Sonraki Adımlar
 - Kod optimizasyonları ve ileriki sürüm planları
