@@ -243,6 +243,7 @@ body::before {
 /* ---------- Upload Preview Thumbnail ---------- */
 .upload-card.has-image .drop-zone {
 	padding: var(--space-lg);
+	cursor: default;
 }
 
 .upload-thumbnail-wrapper {
@@ -760,6 +761,27 @@ input[type="number"] {
 	flex-direction: column;
 	gap: var(--space-xs);
 	margin-top: var(--space-xs);
+}
+
+.preview-loading {
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(10, 10, 15, 0.6);
+	border-radius: var(--radius-md);
+	backdrop-filter: blur(4px);
+}
+
+.preview-spinner {
+	width: 36px;
+	height: 36px;
+	border: 3px solid rgba(129, 140, 248, 0.2);
+	border-top-color: var(--accent-1);
+	border-radius: 50%;
+	animation: spin 0.7s linear infinite;
 }
 
 /* ---------- Compare ---------- */
