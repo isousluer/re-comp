@@ -354,11 +354,7 @@ function updateQualityState() {
 }
 
 // ---------- Auto Process ----------
-function scheduleAutoProcess() {
-  if (!state.originalImage || state.isBatch) return;
-  clearTimeout(autoProcessTimer);
-  autoProcessTimer = setTimeout(() => triggerProcess(), 300);
-}
+function scheduleAutoProcess() {}
 
 function triggerProcess() {
   if (state.isProcessing) return;
