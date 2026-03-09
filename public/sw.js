@@ -1,17 +1,6 @@
-const CACHE = 'recomp-v2';
-const ASSETS = [
-  '/',
-  '/index.html',
-  '/main.js',
-  '/style.css',
-];
+const CACHE = 'recomp-v3';
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(ASSETS))
-  );
-  self.skipWaiting();
-});
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
