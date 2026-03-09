@@ -55,6 +55,7 @@ const compareContainer = document.getElementById('compare-container');
 const compareOriginal = document.getElementById('compare-original');
 const compareProcessed = document.getElementById('compare-processed');
 const compareSlider = document.getElementById('compare-slider');
+const previewCard = document.getElementById('preview-card');
 
 // ---------- State ----------
 let state = {
@@ -311,6 +312,7 @@ const pngWarning = document.getElementById('png-warning');
 const targetSizeInput = document.getElementById('target-size-input');
 
 formatBtns.forEach((btn) => {
+  if (btn.classList.contains('crop-ratio-btn')) return;
   btn.addEventListener('click', () => {
     formatBtns.forEach((b) => b.classList.remove('active'));
     btn.classList.add('active');
@@ -673,7 +675,7 @@ function updateClip(pct) {
 compareSlider.addEventListener('mousedown', (e) => { compareDrag = true; e.preventDefault(); });
 window.addEventListener('mouseup', () => { compareDrag = false; });
 window.addEventListener('mousemove', (e) => {
-  if (!compareDrag) return;
+  if (!compareDrag || compareContainer.classList.contains('hidden')) return;
   const rect = compareContainer.getBoundingClientRect();
   const pct = Math.max(0, Math.min(100, (e.clientX - rect.left) / rect.width * 100));
   compareSlider.style.left = pct + '%';
@@ -684,7 +686,7 @@ window.addEventListener('mousemove', (e) => {
 compareSlider.addEventListener('touchstart', (e) => { compareDrag = true; e.preventDefault(); }, { passive: false });
 window.addEventListener('touchend', () => { compareDrag = false; });
 window.addEventListener('touchmove', (e) => {
-  if (!compareDrag) return;
+  if (!compareDrag || compareContainer.classList.contains('hidden')) return;
   const rect = compareContainer.getBoundingClientRect();
   const pct = Math.max(0, Math.min(100, (e.touches[0].clientX - rect.left) / rect.width * 100));
   compareSlider.style.left = pct + '%';
@@ -713,8 +715,11 @@ cropRatioBtns.forEach(btn => {
 });
 
 function enterCropMode() {
+  compareDrag = false;
   compareContainer.classList.add('hidden');
   previewCanvas.style.visibility = '';
+  cropRatioBtns.forEach(b => b.classList.toggle('active', b.dataset.ratio === 'free'));
+  state.cropRatio = 'free';
   const canvasRect = previewCanvas.getBoundingClientRect();
   const containerRect = previewCanvas.parentElement.getBoundingClientRect();
   cropOverlay.style.left = (canvasRect.left - containerRect.left) + 'px';
@@ -783,6 +788,7 @@ let cropResize = { active: false };
 document.querySelectorAll('.crop-handle').forEach(handle => {
   handle.addEventListener('mousedown', (e) => {
     e.stopPropagation();
+    cropMove.active = false;
     const overlayRect = cropOverlay.getBoundingClientRect();
     cropResize = {
       active: true,
@@ -810,19 +816,24 @@ window.addEventListener('mousemove', (e) => {
 
     if (dir.includes('e')) w = Math.max(MIN, Math.min(origW + dx, overlayW - origLeft));
     if (dir.includes('s')) h = Math.max(MIN, Math.min(origH + dy, overlayH - origTop));
-    if (dir.includes('w')) { const nw = Math.max(MIN, origW - dx); left = origLeft + origW - nw; w = nw; }
-    if (dir.includes('n')) { const nh = Math.max(MIN, origH - dy); top = origTop + origH - nh; h = nh; }
+    if (dir.includes('w')) { const nw = Math.max(MIN, Math.min(origW - dx, origLeft + origW)); left = Math.max(0, origLeft + origW - nw); w = origLeft + origW - left; }
+    if (dir.includes('n')) { const nh = Math.max(MIN, Math.min(origH - dy, origTop + origH)); top = Math.max(0, origTop + origH - nh); h = origTop + origH - top; }
 
     if (state.cropRatio !== 'free') {
       if (dir === 'e' || dir === 'w') {
         h = Math.min(w / state.cropRatio, overlayH - top);
         w = h * state.cropRatio;
+        if (dir === 'w') { left = Math.max(0, origLeft + origW - w); w = origLeft + origW - left; }
       } else if (dir === 'n' || dir === 's') {
         w = Math.min(h * state.cropRatio, overlayW - left);
         h = w / state.cropRatio;
+        if (dir === 'n') { top = Math.max(0, origTop + origH - h); h = origTop + origH - top; }
       } else {
+        // corner
         h = Math.min(w / state.cropRatio, overlayH - top);
         w = h * state.cropRatio;
+        if (dir.includes('n')) { top = Math.max(0, origTop + origH - h); h = origTop + origH - top; w = h * state.cropRatio; }
+        if (dir.includes('w')) { left = Math.max(0, origLeft + origW - w); w = origLeft + origW - left; h = w / state.cropRatio; }
       }
     }
 
@@ -832,7 +843,7 @@ window.addEventListener('mousemove', (e) => {
     cropSelection.style.height = h + 'px';
     return;
   }
-  if (cropMove.active) {
+  if (cropMove.active && !cropResize.active) {
     const dx = e.clientX - cropMove.startX;
     const dy = e.clientY - cropMove.startY;
     const newLeft = Math.max(0, Math.min(cropMove.origLeft + dx, cropMove.overlayW - cropSelection.offsetWidth));

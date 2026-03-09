@@ -21,6 +21,7 @@
 - **Persistent Settings** — Quality, format and aspect ratio lock saved to localStorage
 - **Custom Filename** — Edit the output filename before downloading
 - **Premium UI** — Dark theme with glassmorphism details
+- **PWA** — Install as a desktop/mobile app, works offline
 
 ## 🛠 Tech Stack
 
